@@ -1,0 +1,29 @@
+services:
+  laminas:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: desafio_php
+      DB_SERVER_VERSION: "8.0"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: desafio_php
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
