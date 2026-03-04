@@ -1,0 +1,39 @@
+<?php
+/** @var Laminas\View\Renderer\PhpRenderer $this */
+?>
+<?= $this->doctype() ?>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <?= $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+    <?= $this->headTitle('Desafio PHP - Gestão Online')->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/style.css')) ?>
+    <?= $this->headScript() ?>
+</head>
+<body>
+    <header style="padding:16px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <strong>Desafio PHP - Gestão Online</strong>
+        </div>
+
+        <nav>
+            <form method="post" action="<?= $this->url('logout') ?>" style="display:inline">
+                <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('logout_form')) ?>">
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
+    <main style="max-width: 1000px; margin: 0 auto; padding: 24px;">
+        <?= $this->content ?>
+    </main>
+
+    <footer style="padding:16px; border-top:1px solid #ddd; text-align:center;">
+        <small>&copy; <?= date('Y') ?> Desafio PHP - Gestão Online</small>
+        <br>
+        <small>Desenvolvido por: João Victor Guedes Carrijo</small>
+    </footer>
+
+    <?= $this->inlineScript() ?>
+</body>
+</html>

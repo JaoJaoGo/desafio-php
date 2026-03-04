@@ -1,0 +1,98 @@
+<?php /** @var \Laminas\View\Renderer\PhpRenderer $this */ ?>
+
+<h1>ACs</h1>
+
+<p>
+    <a href="<?= $this->url('home') ?>">&larr; Voltar</a>
+</p>
+
+<p>
+    <a href="<?= $this->url('acs/new') ?>">+ Novo AC</a>
+</p>
+
+<?php if (empty($this->acs)): ?>
+    <p>Nenhum AC cadastrado.</p>
+<?php else: ?>
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="width:80px;">ID</th>
+                <th>Nome</th>
+                <th style="width:320px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->acs as $ac): ?>
+            <tr>
+                <td><?= (int) $ac->getId() ?></td>
+                <td><?= $this->escapeHtml($ac->getName()) ?></td>
+                <td>
+                    <a href="<?= $this->url('acs/edit', ['id' => $ac->getId()]) ?>">Editar</a>
+                    &nbsp;|&nbsp;
+
+                    <button type="button" onclick="openQrModal(<?= (int) $ac->getId() ?>)">
+                        QR Code
+                    </button>
+
+                    &nbsp;|&nbsp;
+
+                    <form
+                        method="post"
+                        action="<?= $this->url('acs/delete', ['id' => $ac->getId()]) ?>"
+                        style="display:inline"
+                        onsubmit="return confirm('Tem certeza que deseja excluir este AC?');"
+                    >
+                        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ac_delete_' . $ac->getId())) ?>">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
+<!-- Modal QRCode (vanilla) -->
+<div id="qrModalBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);"></div>
+<div id="qrModal" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; padding:16px; border-radius:8px; width:360px; max-width:90%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <strong>QR Code</strong>
+        <button type="button" onclick="closeQrModal()">X</button>
+    </div>
+
+    <div style="text-align:center;">
+        <img id="qrImg" src="" alt="QR Code" style="width:300px; height:300px; object-fit:contain;">
+        <div style="margin-top:8px;">
+            <small id="qrHint"></small>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openQrModal(acId){
+        var backdrop = document.getElementById('qrModalBackdrop');
+        var modal = document.getElementById('qrModal');
+        var img = document.getElementById('qrImg');
+        var hint = document.getElementById('qrHint');
+
+        // cache-buster para evitar imagem antiga no browser
+        img.src = '/acs/' + acId + '/qrcode?_=' + Date.now();
+        hint.textContent = 'Conteúdo do QR: /acs/' + acId;
+
+        backdrop.style.display = 'block';
+        modal.style.display = 'block';
+
+        backdrop.onclick = closeQrModal;
+    }
+
+    function closeQrModal(){
+        var backdrop = document.getElementById('qrModalBackdrop');
+        var modal = document.getElementById('qrModal');
+        var img = document.getElementById('qrImg');
+
+        img.src = '';
+        backdrop.style.display = 'none';
+        modal.style.display = 'none';
+        backdrop.onclick = null;
+    }
+</script>

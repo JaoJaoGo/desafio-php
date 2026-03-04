@@ -3,74 +3,79 @@
  * @var Laminas\View\Renderer\PhpRenderer $this
  */
 ?>
-<div class="p-5 mb-4 bg-light rounded-3">
-    <h1 class="display-4">Welcome to<br>Laminas MVC Skeleton Application</h1>
 
-    <p>
-        Congratulations! You have successfully installed the
-        <a href="https://github.com/laminas/laminas-mvc-skeleton" target="_blank">Laminas MVC Skeleton</a>.
-        This skeleton can serve as a simple starting point for you to begin
-        building your application on Laminas MVC.
+<section style="padding: 16px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;">
+    <h1 style="margin: 0 0 8px 0;">Desafio PHP — Gestão Online</h1>
+    <p style="margin: 0;">
+        Aplicação construída com <strong>Laminas MVC</strong> + <strong>Doctrine ORM</strong> + <strong>MySQL</strong>,
+        com autenticação por sessão e rotas protegidas.
     </p>
+</section>
 
-    <hr class="my-4">
-
-    <a class="btn btn-primary btn-lg" href="https://github.com/laminas" target="_blank">
-        Check Laminas on GitHub &raquo;
+<nav style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 16px;">
+    <a
+        href="<?= $this->url('acs') ?>"
+        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
+    >
+        ACs
     </a>
-</div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col">
-        <div class="card h-100">
-            <h2 class="card-header">Follow Development</h2>
-            <div class="card-body">
-                <p>
-                    Laminas Project is under active development. If you are
-                    interested in following the development, you can check
-                    <a href="https://getlaminas.org/blog/">Laminas dev blog</a>,
-                    and <a href="https://github.com/issues?utf8=%E2%9C%93&amp;q=is:issue+org:laminas">Laminas issue tracker</a>
-                    (link requires a GitHub account). This is a great resource
-                    for staying up to date with the latest developments!
-                </p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" href="https://getlaminas.org/" target="_blank">Laminas Project Portal &raquo;</a>
-            </div>
-        </div>
+    <span
+        title="Em breve"
+        style="padding:10px 12px; border:1px solid #eee; border-radius:8px; color:#999; background:#fafafa; cursor:not-allowed;"
+    >
+        AC N2 (em breve)
+    </span>
+
+    <span
+        title="Em breve"
+        style="padding:10px 12px; border:1px solid #eee; border-radius:8px; color:#999; background:#fafafa; cursor:not-allowed;"
+    >
+        AR (em breve)
+    </span>
+</nav>
+
+<section style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+        <h2 style="margin:0 0 8px 0; font-size: 18px;">Funcionalidades</h2>
+        <ul style="margin:0; padding-left:18px;">
+            <li>Login e logout</li>
+            <li>Proteção de rotas (redirect para login)</li>
+            <li>CRUD de AC</li>
+            <li>Geração de QRCode para AC</li>
+        </ul>
     </div>
 
-    <div class="col">
-        <div class="card h-100">
-            <h2 class="card-header">Discover Modules</h2>
-            <div class="card-body">
-                <p>
-                    Laminas MVC is a modular application.
-                    You can find multiple compatible modules on packagist.
-                </p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" href="https://packagist.org/?tags=module~zf2~zendframework~zend%20framework~zend%20framework%202~zf3~zf~zend~laminas" target="_blank">
-                    Explore Laminas Modules &raquo;</a>
-            </div>
-        </div>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+        <h2 style="margin:0 0 8px 0; font-size: 18px;">Tecnologias</h2>
+        <ul style="margin:0; padding-left:18px;">
+            <li>Laminas MVC</li>
+            <li>Doctrine ORM + Migrations</li>
+            <li>MySQL (Docker)</li>
+            <li>QR Code: chillerlan/php-qrcode</li>
+        </ul>
     </div>
 
-    <div class="col">
-        <div class="card h-100">
-            <h2 class="card-header">Help &amp; Support</h2>
-            <div class="card-body">
-                <p>
-                    If you need any help or support while developing with Laminas,
-                    you may reach us via <a href="https://laminas.dev/chat">chat</a> or
-                    <a href="https://discourse.laminas.dev">forum</a>.
-                    We'd love to hear any questions or feedback you may have
-                    regarding any release.
-                </p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" href="https://laminas.dev/chat" target="_blank">Ping us on chat &raquo;</a>
-            </div>
-        </div>
+    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
+        <h2 style="margin:0 0 8px 0; font-size: 18px;">Acesso</h2>
+        <p style="margin:0 0 8px 0;">
+            Use o usuário seed:
+        </p>
+        <ul style="margin:0; padding-left:18px;">
+            <li><strong>Email:</strong> admin@admin.com</li>
+            <li><strong>Senha:</strong> admin123</li>
+        </ul>
+        <p style="margin:8px 0 0 0; color:#666;">
+            (Se você alterou via CLI, utilize as credenciais configuradas.)
+        </p>
     </div>
-</div>
+</section>
+
+<section style="margin-top: 16px; padding: 12px; border: 1px dashed #ddd; border-radius: 8px;">
+    <h2 style="margin:0 0 8px 0; font-size: 18px;">Notas rápidas</h2>
+    <ul style="margin:0; padding-left:18px;">
+        <li>Rotas protegidas exigem login (qualquer rota diferente de <code>/login</code>).</li>
+        <li>Operações de escrita usam <strong>POST</strong> com redirecionamento (PRG).</li>
+        <li>Delete é feito via <strong>POST</strong> para evitar efeitos colaterais em GET.</li>
+    </ul>
+</section>

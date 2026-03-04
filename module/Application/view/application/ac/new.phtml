@@ -1,0 +1,28 @@
+<?php /** @var \Laminas\View\Renderer\PhpRenderer $this */ ?>
+
+<h1>Novo AC</h1>
+
+<p>
+    <a href="<?= $this->url('acs') ?>">&larr; Voltar</a>
+</p>
+
+<?php if (!empty($this->error)): ?>
+    <div style="padding:10px; border:1px solid #f00; margin-bottom:10px;">
+        <?= $this->escapeHtml($this->error) ?>
+    </div>
+<?php endif; ?>
+
+<form method="post" action="<?= $this->url('acs/new') ?>">
+    <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ac_new')) ?>">
+    <div style="margin-bottom:10px;">
+        <label>Nome</label><br>
+        <input
+            type="text"
+            name="name"
+            value="<?= $this->escapeHtmlAttr((string) $this->name) ?>"
+            required
+        >
+    </div>
+
+    <button type="submit">Salvar</button>
+</form>

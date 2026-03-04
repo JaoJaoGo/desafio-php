@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+?>
+<?= $this->doctype() ?>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <?= $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+    <?= $this->headTitle('Login - Desafio PHP')->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/style.css')) ?>
+</head>
+<body>
+    <main style="max-width: 420px; margin: 80px auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px;">
+        <?= $this->content ?>
+    </main>
+</body>
+</html>
