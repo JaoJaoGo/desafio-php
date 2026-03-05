@@ -1,7 +1,5 @@
 <?php
-/**
- * @var Laminas\View\Renderer\PhpRenderer $this
- */
+/** @var Laminas\View\Renderer\PhpRenderer $this */
 ?>
 
 <section style="padding: 16px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;">
@@ -20,19 +18,19 @@
         ACs
     </a>
 
-    <span
-        title="Em breve"
-        style="padding:10px 12px; border:1px solid #eee; border-radius:8px; color:#999; background:#fafafa; cursor:not-allowed;"
+    <a
+        href="<?= $this->url('ac-n2') ?>"
+        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
     >
-        AC N2 (em breve)
-    </span>
+        AC N2
+    </a>
 
-    <span
-        title="Em breve"
-        style="padding:10px 12px; border:1px solid #eee; border-radius:8px; color:#999; background:#fafafa; cursor:not-allowed;"
+    <a
+        href="<?= $this->url('ars') ?>"
+        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
     >
-        AR (em breve)
-    </span>
+        AR
+    </a>
 </nav>
 
 <section style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">

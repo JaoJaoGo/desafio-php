@@ -15,6 +15,7 @@ final class AcController extends AbstractActionController
     public function __construct(
         private readonly AcService $acs,
         private readonly QrCodeService $qr,
+        private readonly string $baseUrl,
     ) {}
 
     public function indexAction(): ViewModel
@@ -102,6 +103,23 @@ final class AcController extends AbstractActionController
         return $this->redirect()->toRoute('acs');
     }
 
+    public function viewAction(): ViewModel|Response
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+
+        $ac = $this->acs->find($id);
+        if (!$ac) {
+            return $this->notFoundAction();
+        }
+
+        $children = $this->acs->listChildren($ac);
+
+        return new ViewModel([
+            'ac' => $ac,
+            'acn2s' => $children,
+        ]);
+    }
+
     public function qrcodeAction(): Response
     {
         $id = (int) $this->params()->fromRoute('id', 0);
@@ -113,7 +131,7 @@ final class AcController extends AbstractActionController
             return $response;
         }
 
-        $url = sprintf('http://localhost:8080/acs/%d', $ac->getId());
+        $url = sprintf('%s/acs/%d', $this->baseUrl, $ac->getId());
         $png = $this->qr->renderPng($url, 6);
 
         $response = $this->getResponse();

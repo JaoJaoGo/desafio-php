@@ -1,0 +1,51 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * @var Application\Entity\Ac $ac
+ * @var list<Application\Entity\AcN2> $acn2s
+ */
+?>
+
+<a href="<?= $this->url('acs') ?>">&larr; Voltar</a>
+
+<h1 style="margin-top:12px;">AC #<?= (int) $ac->getId() ?></h1>
+
+<div style="margin-top:12px;">
+    <p><strong>Nome:</strong> <?= $this->escapeHtml($ac->getName()) ?></p>
+</div>
+
+<hr style="margin:24px 0;">
+
+<div style="display:flex; align-items:center; justify-content:space-between;">
+    <h2 style="margin:0;">ACN2 vinculados</h2>
+    <a href="<?= $this->url('ac-n2', ['action' => 'new']) ?>">+ Novo ACN2</a>
+</div>
+
+<?php if (count($acn2s) === 0): ?>
+    <p style="margin-top:12px; opacity:0.8;">Nenhum ACN2 cadastrado para este AC.</p>
+<?php else: ?>
+    <table style="width:100%; margin-top:12px;" cellpadding="8" cellspacing="0" border="1">
+        <thead>
+            <tr>
+                <th style="width:80px;">ID</th>
+                <th>Nome</th>
+                <th style="width:220px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($acn2s as $item): ?>
+                <tr>
+                    <td><?= (int) $item->getId() ?></td>
+                    <td><?= $this->escapeHtml($item->getName()) ?></td>
+                    <td>
+                        <a href="<?= $this->url('ac-n2/view', ['id' => $item->getId()]) ?>">Ver</a>
+                        |
+                        <a href="<?= $this->url('ac-n2/edit', ['id' => $item->getId()]) ?>">Editar</a>
+                        |
+                        <a href="<?= $this->url('ac-n2/qrcode', ['id' => $item->getId()]) ?>" target="_blank">QRCode</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

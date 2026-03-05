@@ -34,6 +34,136 @@
         <small>Desenvolvido por: João Victor Guedes Carrijo</small>
     </footer>
 
+
+    <!-- Modais globais (QRCode + Delete) -->
+<div id="qrModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999;">
+    <div style="background:#fff; max-width:520px; margin:10vh auto; padding:16px; border-radius:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>QRCode</strong>
+            <button type="button" onclick="closeQrModal()" style="border:none;background:none;font-size:18px;cursor:pointer;">✕</button>
+        </div>
+
+        <div style="margin-top:12px; text-align:center;">
+            <img id="qrImg" alt="QRCode" style="max-width:100%; height:auto;" />
+            <div style="margin-top:8px;">
+                <small id="qrHint"></small>
+            </div>
+        </div>
+
+        <div style="margin-top:12px; text-align:right;">
+            <button type="button" onclick="closeQrModal()" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer;">
+                Fechar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999;">
+    <div style="background:#fff; max-width:520px; margin:10vh auto; padding:16px; border-radius:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>Confirmar exclusão</strong>
+            <button type="button" onclick="closeDeleteModal()" style="border:none;background:none;font-size:18px;cursor:pointer;">✕</button>
+        </div>
+
+        <div style="margin-top:12px;">
+            <p style="margin:0 0 8px 0;">Tem certeza que deseja excluir este item?</p>
+
+            <div style="padding:10px 12px; border:1px solid #eee; border-radius:8px; background:#fafafa;">
+                <strong id="deleteItemName"></strong>
+            </div>
+
+            <p style="margin:10px 0 0 0; color:#666;">Esta ação não pode ser desfeita.</p>
+        </div>
+
+        <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:8px;">
+            <button
+                type="button"
+                onclick="closeDeleteModal()"
+                style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:#fff;"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                onclick="confirmDelete()"
+                style="padding:10px 12px; border:1px solid #c00; border-radius:8px; cursor:pointer; background:#c00; color:#fff;"
+            >
+                Excluir
+            </button>
+        </div>
+    </div>
+</div>
+
+    <script>
+    (function(){
+    let __deleteForm = null;
+
+    // QR Modal: recebe a URL completa do endpoint que gera o PNG (mais flexível)
+    window.openQrModal = function(qrEndpointUrl, hintText){
+        const modal = document.getElementById('qrModal');
+        const img = document.getElementById('qrImg');
+        const hint = document.getElementById('qrHint');
+
+        // cache-buster pra evitar imagem antiga
+        const sep = qrEndpointUrl.includes('?') ? '&' : '?';
+        img.src = qrEndpointUrl + sep + '_=' + Date.now();
+
+        hint.textContent = hintText || '';
+        modal.style.display = 'block';
+
+        // fechar clicando no backdrop
+        modal.onclick = function(e){
+            if(e.target === modal) window.closeQrModal();
+        };
+    };
+
+    window.closeQrModal = function(){
+        const modal = document.getElementById('qrModal');
+        const img = document.getElementById('qrImg');
+        const hint = document.getElementById('qrHint');
+
+        img.src = '';
+        hint.textContent = '';
+        modal.style.display = 'none';
+        modal.onclick = null;
+    };
+
+    window.openDeleteModal = function(btn){
+        const form = btn.closest('form[data-delete-form]');
+        if(!form) return;
+
+        __deleteForm = form;
+
+        const modal = document.getElementById('deleteModal');
+        const nameEl = document.getElementById('deleteItemName');
+
+        const name = form.getAttribute('data-delete-name') || '';
+        nameEl.textContent = name !== '' ? name : '(sem nome)';
+
+        modal.style.display = 'block';
+
+        // fechar clicando no backdrop
+        modal.onclick = function(e){
+            if(e.target === modal) window.closeDeleteModal();
+        };
+    };
+
+    window.closeDeleteModal = function(){
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'none';
+        modal.onclick = null;
+        __deleteForm = null;
+    };
+
+    window.confirmDelete = function(){
+        if(__deleteForm){
+            __deleteForm.submit();
+        }
+    };
+    })();
+    </script>
+
     <?= $this->inlineScript() ?>
 </body>
 </html>

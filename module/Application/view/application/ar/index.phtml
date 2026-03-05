@@ -1,0 +1,97 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * @var list<Application\Entity\Ar> $items
+ */
+?>
+
+<p>
+    <a href="<?= $this->url('home') ?>">&larr; Voltar</a>
+</p>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+    <h1 style="margin:0;">AR</h1>
+    <a href="<?= $this->url('ars/new') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">
+        Novo AR
+    </a>
+</div>
+
+<?php if (empty($items)): ?>
+    <p>Nenhum AR cadastrado.</p>
+<?php else: ?>
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">ID</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Nome</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">ACN2</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">AC</th>
+                <th style="border-bottom:1px solid #ddd; padding:8px; width:280px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($items as $item): ?>
+            <?php
+                $id = (int) $item->getId();
+                $acn2 = $item->getAcN2();
+                $ac = $acn2->getAc();
+            ?>
+            <tr>
+                <td style="border-bottom:1px solid #eee; padding:8px;"><?= $id ?></td>
+
+                <td style="border-bottom:1px solid #eee; padding:8px;">
+                    <?= $this->escapeHtml($item->getName()) ?>
+                </td>
+
+                <td style="border-bottom:1px solid #eee; padding:8px;">
+                    #<?= (int) $acn2->getId() ?> — <?= $this->escapeHtml($acn2->getName()) ?>
+                </td>
+
+                <td style="border-bottom:1px solid #eee; padding:8px;">
+                    #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
+                </td>
+
+                <td style="border-bottom:1px solid #eee; padding:8px;">
+                    <a href="<?= $this->url('ars/edit', ['id' => $id]) ?>">Editar</a>
+                    &nbsp;|&nbsp;
+
+                    <form
+                        action="<?= $this->url('ars/delete', ['id' => $id]) ?>"
+                        method="post"
+                        style="display:inline;"
+                        data-delete-form
+                        data-delete-name="<?= $this->escapeHtmlAttr($item->getName()) ?>"
+                    >
+                        <input
+                            type="hidden"
+                            name="csrf"
+                            value="<?= $this->escapeHtmlAttr($this->csrfToken('ar_delete_' . $id)) ?>"
+                        >
+
+                        <button
+                            type="button"
+                            style="background:none;border:none;padding:0;color:#c00;cursor:pointer;"
+                            onclick="openDeleteModal(this)"
+                        >
+                            Excluir
+                        </button>
+                    </form>
+
+                    &nbsp;|&nbsp;
+
+                    <button
+                        type="button"
+                        style="background:none;border:none;padding:0;color:#06c;cursor:pointer;"
+                        onclick="openQrModal(
+                            '<?= $this->escapeHtmlAttr($this->url('ars/qrcode', ['id' => $id])) ?>',
+                            'Conteúdo do QR: /ars/<?= $id ?>'
+                        )"
+                    >
+                        QRCode
+                    </button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

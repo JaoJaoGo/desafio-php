@@ -1,0 +1,36 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * @var Application\Entity\Ar $item
+ * @var Application\Entity\AcN2 $acn2
+ * @var Application\Entity\Ac $ac
+ */
+?>
+
+<a href="<?= $this->url('ars') ?>">&larr; Voltar</a>
+
+<h1 style="margin-top:12px;">AR #<?= (int) $item->getId() ?></h1>
+
+<div style="margin-top:12px;">
+    <p><strong>Nome:</strong> <?= $this->escapeHtml($item->getName()) ?></p>
+</div>
+
+<hr style="margin:24px 0;">
+
+<h2 style="margin:0;">Pai (ACN2)</h2>
+<p style="margin-top:12px;">
+    <strong>#<?= (int) $acn2->getId() ?> —</strong>
+    <?= $this->escapeHtml($acn2->getName()) ?>
+    |
+    <a href="<?= $this->url('ac-n2/view', ['id' => $acn2->getId()]) ?>">Ver ACN2</a>
+</p>
+
+<hr style="margin:24px 0;">
+
+<h2 style="margin:0;">Avô (AC)</h2>
+<p style="margin-top:12px;">
+    <strong>#<?= (int) $ac->getId() ?> —</strong>
+    <?= $this->escapeHtml($ac->getName()) ?>
+    |
+    <a href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>">Ver AC</a>
+</p>

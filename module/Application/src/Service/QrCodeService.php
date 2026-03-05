@@ -9,13 +9,20 @@ use chillerlan\QRCode\QROptions;
 
 final class QrCodeService
 {
-    public function renderPng(string $data, int $scale = 6): string
+    public function renderPng(string $text, int $scale = 6): string
     {
+        if (!extension_loaded('gd')) {
+            throw new \RuntimeException('Extensão GD não está carregada (ext-gd).');
+        }
+
         $options = new QROptions([
             'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-            'scale'      => $scale,
+            'scale'      => max(1, $scale),
+
+            // garantir que o retorno seja "raw binary"
+            'imageBase64' => false,
         ]);
 
-        return (new QRCode($options))->render($data);
+        return (new QRCode($options))->render($text);
     }
 }

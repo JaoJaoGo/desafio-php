@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Application\Service;
 
 use Application\Entity\Ac;
+use Application\Entity\AcN2;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class AcService
@@ -24,6 +25,15 @@ final class AcService
         /** @var Ac|null $ac */
         $ac = $this->em->find(Ac::class, $id);
         return $ac;
+    }
+
+    /** @return list<AcN2> */
+    public function listChildren(Ac $ac): array
+    {
+        return $this->em->getRepository(AcN2::class)->findBy(
+            ['ac' => $ac],
+            ['id' => 'DESC']
+        );
     }
 
     public function create(string $name): Ac

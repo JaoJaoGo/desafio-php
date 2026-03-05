@@ -1,0 +1,52 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * @var Application\Entity\Ar $item
+ * @var string|null $error
+ * @var string $name
+ * @var int $acN2Id
+ * @var list<Application\Entity\AcN2> $acN2s
+ */
+?>
+
+<h1>Editar AR #<?= (int) $item->getId() ?></h1>
+
+<?php if (!empty($error)): ?>
+    <div style="padding:12px; border:1px solid #f3c; background:#fff5f5; border-radius:8px; margin:12px 0;">
+        <?= $this->escapeHtml($error) ?>
+    </div>
+<?php endif; ?>
+
+<form method="post" action="<?= $this->url('ars/edit', ['id' => $item->getId()]) ?>">
+    <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ar_edit_' . $item->getId())) ?>">
+
+    <div style="margin-bottom:12px;">
+        <label>AC N2</label><br>
+        <select name="ac_n2_id" required style="padding:8px; width:100%; max-width:420px;">
+            <option value="">Selecione...</option>
+            <?php foreach ($acN2s as $acN2): ?>
+                <?php $ac = $acN2->getAc(); ?>
+                <option value="<?= (int) $acN2->getId() ?>" <?= ((int)$acN2Id === (int)$acN2->getId()) ? 'selected' : '' ?>>
+                    #<?= (int) $acN2->getId() ?> — <?= $this->escapeHtml($acN2->getName()) ?> (AC: <?= $this->escapeHtml($ac->getName()) ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <div style="margin-bottom:12px;">
+        <label>Nome</label><br>
+        <input
+            type="text"
+            name="name"
+            value="<?= $this->escapeHtmlAttr($name) ?>"
+            required
+            maxlength="150"
+            style="padding:8px; width:100%; max-width:420px;"
+        >
+    </div>
+
+    <div style="display:flex; gap:10px;">
+        <button type="submit" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer;">Salvar</button>
+        <a href="<?= $this->url('ars') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">Cancelar</a>
+    </div>
+</form>

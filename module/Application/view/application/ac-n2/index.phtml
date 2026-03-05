@@ -2,7 +2,7 @@
 
 /**
  * @var Laminas\View\Renderer\PhpRenderer $this
- * @var list<Application\Entity\Ac> $acs
+ * @var list<Application\Entity\AcN2> $items
  */
 ?>
 
@@ -11,41 +11,49 @@
 </p>
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-    <h1 style="margin:0;">ACs</h1>
-    <a href="<?= $this->url('acs/new') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">
-        Novo AC
+    <h1 style="margin:0;">AC N2</h1>
+    <a href="<?= $this->url('ac-n2/new') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">
+        Novo AC N2
     </a>
 </div>
 
-<?php if (empty($acs)): ?>
-    <p>Nenhum AC cadastrado.</p>
+<?php if (empty($items)): ?>
+    <p>Nenhum AC N2 cadastrado.</p>
 <?php else: ?>
     <table style="width:100%; border-collapse: collapse;">
         <thead>
             <tr>
-                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px; width:80px;">ID</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">ID</th>
                 <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Nome</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">AC</th>
                 <th style="border-bottom:1px solid #ddd; padding:8px; width: 260px;">Ações</th>
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($acs as $ac): ?>
-            <?php $id = (int) $ac->getId(); ?>
+        <?php foreach ($items as $item): ?>
+            <?php
+                $id = (int) $item->getId();
+                $ac = $item->getAc();
+                $acLabel = sprintf('#%d — %s', (int) $ac->getId(), $ac->getName());
+            ?>
             <tr>
                 <td style="border-bottom:1px solid #eee; padding:8px;"><?= $id ?></td>
-                <td style="border-bottom:1px solid #eee; padding:8px;"><?= $this->escapeHtml($ac->getName()) ?></td>
+                <td style="border-bottom:1px solid #eee; padding:8px;"><?= $this->escapeHtml($item->getName()) ?></td>
                 <td style="border-bottom:1px solid #eee; padding:8px;">
-                    <a href="<?= $this->url('acs/edit', ['id' => $id]) ?>">Editar</a>
+                    #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
+                </td>
+                <td style="border-bottom:1px solid #eee; padding:8px;">
+                    <a href="<?= $this->url('ac-n2/edit', ['id' => $id]) ?>">Editar</a>
                     &nbsp;|&nbsp;
 
                     <form
+                        action="<?= $this->url('ac-n2/delete', ['id' => $id]) ?>"
                         method="post"
-                        action="<?= $this->url('acs/delete', ['id' => $id]) ?>"
                         style="display:inline;"
                         data-delete-form
-                        data-delete-name="<?= $this->escapeHtmlAttr($ac->getName()) ?>"
+                        data-delete-name="<?= $this->escapeHtmlAttr($item->getName()) ?>"
                     >
-                        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ac_delete_' . $id)) ?>">
+                        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('acn2_delete_' . $id)) ?>">
 
                         <button
                             type="button"
@@ -62,8 +70,8 @@
                         type="button"
                         style="background:none;border:none;padding:0;color:#06c;cursor:pointer;"
                         onclick="openQrModal(
-                            '<?= $this->escapeHtmlAttr($this->url('acs/qrcode', ['id' => $id])) ?>',
-                            'Conteúdo do QR: <?= $this->escapeHtmlAttr($this->url('acs', [], ['force_canonical' => false])) ?><?= $id ?>'
+                            '<?= $this->escapeHtmlAttr($this->url('ac-n2/qrcode', ['id' => $id])) ?>',
+                            'Conteúdo do QR: /ac-n2/<?= $id ?>'
                         )"
                     >
                         QRCode

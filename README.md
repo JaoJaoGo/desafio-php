@@ -6,6 +6,44 @@ Este projeto implementa o desafio técnico usando Laminas (MVC), Doctrine ORM, D
 - Docker Desktop (com Docker Compose)
 - (Opcional) DBeaver / MySQL Workbench para visualizar o banco
 
+## Estrutura do domínio
+
+O sistema implementa três níveis hierárquicos:
+
+```
+AC
+   └── ACN2
+         └── AR
+```
+AC
+- entidade principal
+
+ACN2
+- filho de AC
+
+AR
+- filho de ACN2
+
+## QRCode
+
+Cada entidade (AC, ACN2, AR) possui um QRCode.
+
+O QRCode aponta para a página de detalhes da entidade:
+
+/acs/{id}
+/ac-n2/{id}
+/ars/{id}
+
+Essas páginas exibem a hierarquia completa da entidade.
+
+## Instalar dependências PHP
+
+Se for a primeira execução ou se a pasta `vendor` não existir:
+
+```bash
+docker compose run --rm laminas composer install
+```
+
 ## Como rodar o projeto (Docker)
 1. Subir os containers:
    ```bash
@@ -64,6 +102,12 @@ Se o usuário já existir e quiser sobrescrever a senha:
 docker compose exec laminas vendor/bin/doctrine-module app:user:create --email=admin@admin.com --password=admin123 --force
 ```
 
+Após criar o usuário, você pode fazer login na aplicação com as credenciais que você definiu ou caso não tenha definido, use as credenciais padrão:
+- Email: admin@admin.com
+- Senha: admin123
+
+Página de login: http://localhost:8080/login
+
 ## Troubleshooting
 
 ### Erros de conexão com MySQL
@@ -79,4 +123,30 @@ Se o container PHP não listar ```pdo_mysql``` em ```php -m```, é necessário h
 ```bash
 docker compose down
 docker compose up -d --build
+```
+
+### QRCode não gera imagem (erro ext-gd)
+
+Se aparecer o erro:
+```bash
+ext-gd not loaded
+```
+
+É necessário habilitar a extensão GD no Dockerfile e rebuildar o container:
+
+```bash
+docker compose down
+docker compose up -d --build
+```
+
+### Doctrine Proxy Directory
+Se aparecer o erro:
+```bash
+proxy directory must be writable
+```
+
+Garanta que a pasta existe e tem permissão:
+
+```bash
+docker compose exec laminas sh -lc "mkdir -p data/DoctrineORMModule/Proxy && chmod -R 777 data/DoctrineORMModule"
 ```

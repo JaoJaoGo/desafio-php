@@ -13,9 +13,15 @@ final class AcControllerFactory
 {
     public function __invoke(ContainerInterface $container): AcController
     {
+        $config = $container->get('config');
+
+        $baseUrl = (string)($config['app']['base_url'] ?? 'http://localhost:8080');
+        $baseUrl = rtrim($baseUrl, '/');
+
         return new AcController(
             $container->get(AcService::class),
             $container->get(QrCodeService::class),
+            $baseUrl,
         );
     }
 }

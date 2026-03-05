@@ -1,0 +1,62 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * @var Application\Entity\AcN2 $item
+ * @var Application\Entity\Ac $ac
+ * @var list<Application\Entity\Ar> $ars
+ */
+?>
+
+<a href="<?= $this->url('ac-n2') ?>">&larr; Voltar</a>
+
+<h1 style="margin-top:12px;">ACN2 #<?= (int) $item->getId() ?></h1>
+
+<div style="margin-top:12px;">
+    <p><strong>Nome:</strong> <?= $this->escapeHtml($item->getName()) ?></p>
+</div>
+
+<hr style="margin:24px 0;">
+
+<h2 style="margin:0;">Pai (AC)</h2>
+<p style="margin-top:12px;">
+    <strong>#<?= (int) $ac->getId() ?> —</strong>
+    <?= $this->escapeHtml($ac->getName()) ?>
+    |
+    <a href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>">Ver AC</a>
+</p>
+
+<hr style="margin:24px 0;">
+
+<div style="display:flex; align-items:center; justify-content:space-between;">
+    <h2 style="margin:0;">ARs vinculados</h2>
+    <a href="<?= $this->url('ars', ['action' => 'new']) ?>">+ Novo AR</a>
+</div>
+
+<?php if (count($ars) === 0): ?>
+    <p style="margin-top:12px; opacity:0.8;">Nenhum AR cadastrado para este ACN2.</p>
+<?php else: ?>
+    <table style="width:100%; margin-top:12px;" cellpadding="8" cellspacing="0" border="1">
+        <thead>
+            <tr>
+                <th style="width:80px;">ID</th>
+                <th>Nome</th>
+                <th style="width:220px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($ars as $ar): ?>
+                <tr>
+                    <td><?= (int) $ar->getId() ?></td>
+                    <td><?= $this->escapeHtml($ar->getName()) ?></td>
+                    <td>
+                        <a href="<?= $this->url('ars/view', ['id' => $ar->getId()]) ?>">Ver</a>
+                        |
+                        <a href="<?= $this->url('ars/edit', ['id' => $ar->getId()]) ?>">Editar</a>
+                        |
+                        <a href="<?= $this->url('ars/qrcode', ['id' => $ar->getId()]) ?>" target="_blank">QRCode</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
