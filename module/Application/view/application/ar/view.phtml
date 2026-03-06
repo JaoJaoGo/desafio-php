@@ -7,30 +7,111 @@
  */
 ?>
 
-<a href="<?= $this->url('ars') ?>">&larr; Voltar</a>
+<section class="crud-page">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('ars') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
+    </div>
 
-<h1 style="margin-top:12px;">AR #<?= (int) $item->getId() ?></h1>
+    <header class="crud-hero">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Detalhes do registro</span>
+            <h1 class="crud-hero__title">
+                AR <span class="crud-hero__id">#<?= (int) $item->getId() ?></span>
+            </h1>
+            <p class="crud-hero__text">
+                Visualização detalhada do AR e seus vínculos hierárquicos.
+            </p>
+        </div>
 
-<div style="margin-top:12px;">
-    <p><strong>Nome:</strong> <?= $this->escapeHtml($item->getName()) ?></p>
-</div>
+        <div class="crud-hero__actions">
+            <a
+                href="<?= $this->url('ars/edit', ['id' => $item->getId()]) ?>"
+                class="crud-btn crud-btn--primary"
+            >
+                Editar AR
+            </a>
+        </div>
+    </header>
 
-<hr style="margin:24px 0;">
+    <section class="crud-detail-card">
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID</span>
+                <strong class="crud-detail-item__value">#<?= (int) $item->getId() ?></strong>
+            </div>
 
-<h2 style="margin:0;">Pai (ACN2)</h2>
-<p style="margin-top:12px;">
-    <strong>#<?= (int) $acn2->getId() ?> —</strong>
-    <?= $this->escapeHtml($acn2->getName()) ?>
-    |
-    <a href="<?= $this->url('ac-n2/view', ['id' => $acn2->getId()]) ?>">Ver ACN2</a>
-</p>
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($item->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
 
-<hr style="margin:24px 0;">
+    <section class="crud-detail-card">
+        <div class="crud-table-card__header">
+            <div>
+                <h2 class="crud-section-title">Pai (AC N2)</h2>
+                <p class="crud-section-subtitle">
+                    Registro imediatamente acima na hierarquia.
+                </p>
+            </div>
 
-<h2 style="margin:0;">Avô (AC)</h2>
-<p style="margin-top:12px;">
-    <strong>#<?= (int) $ac->getId() ?> —</strong>
-    <?= $this->escapeHtml($ac->getName()) ?>
-    |
-    <a href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>">Ver AC</a>
-</p>
+            <a
+                href="<?= $this->url('ac-n2/view', ['id' => $acn2->getId()]) ?>"
+                class="crud-btn crud-btn--ghost crud-btn--sm"
+            >
+                Ver AC N2
+            </a>
+        </div>
+
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID do AC N2</span>
+                <strong class="crud-detail-item__value">#<?= (int) $acn2->getId() ?></strong>
+            </div>
+
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome do AC N2</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($acn2->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="crud-detail-card">
+        <div class="crud-table-card__header">
+            <div>
+                <h2 class="crud-section-title">Avô (AC)</h2>
+                <p class="crud-section-subtitle">
+                    Autoridade certificadora principal associada a este AR.
+                </p>
+            </div>
+
+            <a
+                href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>"
+                class="crud-btn crud-btn--ghost crud-btn--sm"
+            >
+                Ver AC
+            </a>
+        </div>
+
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID da AC</span>
+                <strong class="crud-detail-item__value">#<?= (int) $ac->getId() ?></strong>
+            </div>
+
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome da AC</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($ac->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
+</section>

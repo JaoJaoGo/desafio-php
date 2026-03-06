@@ -8,48 +8,88 @@
  */
 ?>
 
-<h1>Novo AC N2</h1>
-
-<?php if (!empty($error)): ?>
-    <div style="padding:12px; border:1px solid #f3c; background:#fff5f5; border-radius:8px; margin:12px 0;">
-        <?= $this->escapeHtml($error) ?>
+<section class="crud-page crud-page--form">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('ac-n2') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
     </div>
-<?php endif; ?>
 
-<?php if (empty($acs)): ?>
-    <p>Crie uma AC antes de cadastrar uma AC N2.</p>
-    <a href="<?= $this->url('acs/new') ?>">Ir para ACs</a>
-<?php else: ?>
-    <form method="post" action="<?= $this->url('ac-n2/new') ?>">
-        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('acn2_new')) ?>">
-
-        <div style="margin-bottom:12px;">
-            <label>AC</label><br>
-            <select name="ac_id" required style="padding:8px; width:100%; max-width:420px;">
-                <option value="">Selecione...</option>
-                <?php foreach ($acs as $ac): ?>
-                    <option value="<?= (int) $ac->getId() ?>" <?= ((int)$acId === (int)$ac->getId()) ? 'selected' : '' ?>>
-                        #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+    <header class="crud-hero crud-hero--compact">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Cadastro</span>
+            <h1 class="crud-hero__title">Novo AC N2</h1>
+            <p class="crud-hero__text">
+                Cadastre um novo registro vinculando-o a uma AC já existente.
+            </p>
         </div>
+    </header>
 
-        <div style="margin-bottom:12px;">
-            <label>Nome</label><br>
-            <input
-                type="text"
-                name="name"
-                value="<?= $this->escapeHtmlAttr($name) ?>"
-                required
-                maxlength="150"
-                style="padding:8px; width:100%; max-width:420px;"
-            >
-        </div>
+    <section class="crud-form-card">
+        <?php if (!empty($error)): ?>
+            <div class="crud-alert crud-alert--error" role="alert">
+                <?= $this->escapeHtml($error) ?>
+            </div>
+        <?php endif; ?>
 
-        <div style="display:flex; gap:10px;">
-            <button type="submit" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer;">Salvar</button>
-            <a href="<?= $this->url('ac-n2') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">Cancelar</a>
-        </div>
-    </form>
-<?php endif; ?>
+        <?php if (empty($acs)): ?>
+            <div class="crud-empty crud-empty--embedded">
+                <div class="crud-empty__icon">!</div>
+                <h2 class="crud-empty__title">Nenhuma AC disponível</h2>
+                <p class="crud-empty__text">
+                    Crie uma AC antes de cadastrar uma AC N2.
+                </p>
+                <a href="<?= $this->url('acs/new') ?>" class="crud-btn crud-btn--primary">
+                    Ir para ACs
+                </a>
+            </div>
+        <?php else: ?>
+            <form method="post" action="<?= $this->url('ac-n2/new') ?>" class="crud-form">
+                <input
+                    type="hidden"
+                    name="csrf"
+                    value="<?= $this->escapeHtmlAttr($this->csrfToken('acn2_new')) ?>"
+                >
+
+                <div class="crud-form__group">
+                    <label class="crud-form__label" for="ac_id">AC</label>
+                    <select class="crud-form__select" name="ac_id" id="ac_id" required>
+                        <option value="">Selecione...</option>
+                        <?php foreach ($acs as $ac): ?>
+                            <option
+                                value="<?= (int) $ac->getId() ?>"
+                                <?= ((int) $acId === (int) $ac->getId()) ? 'selected' : '' ?>
+                            >
+                                #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="crud-form__group">
+                    <label class="crud-form__label" for="name">Nome</label>
+                    <input
+                        class="crud-form__input"
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="<?= $this->escapeHtmlAttr($name) ?>"
+                        required
+                        maxlength="150"
+                        placeholder="Digite o nome do AC N2"
+                    >
+                </div>
+
+                <div class="crud-form__actions">
+                    <a href="<?= $this->url('ac-n2') ?>" class="crud-btn crud-btn--secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="crud-btn crud-btn--primary">
+                        Salvar AC N2
+                    </button>
+                </div>
+            </form>
+        <?php endif; ?>
+    </section>
+</section>

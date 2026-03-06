@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var Laminas\View\Renderer\PhpRenderer $this
  * @var Application\Entity\Ac $ac
@@ -6,46 +7,130 @@
  */
 ?>
 
-<a href="<?= $this->url('acs') ?>">&larr; Voltar</a>
+<section class="crud-page">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('acs') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
+    </div>
 
-<h1 style="margin-top:12px;">AC #<?= (int) $ac->getId() ?></h1>
+    <header class="crud-hero">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Detalhes do registro</span>
+            <h1 class="crud-hero__title">
+                AC <span class="crud-hero__id">#<?= (int) $ac->getId() ?></span>
+            </h1>
+            <p class="crud-hero__text">
+                Visualização detalhada da autoridade certificadora e seus vínculos.
+            </p>
+        </div>
 
-<div style="margin-top:12px;">
-    <p><strong>Nome:</strong> <?= $this->escapeHtml($ac->getName()) ?></p>
-</div>
+        <div class="crud-hero__actions">
+            <a
+                href="<?= $this->url('acs/edit', ['id' => $ac->getId()]) ?>"
+                class="crud-btn crud-btn--primary"
+            >
+                Editar AC
+            </a>
+        </div>
+    </header>
 
-<hr style="margin:24px 0;">
+    <section class="crud-detail-card">
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID</span>
+                <strong class="crud-detail-item__value">#<?= (int) $ac->getId() ?></strong>
+            </div>
 
-<div style="display:flex; align-items:center; justify-content:space-between;">
-    <h2 style="margin:0;">ACN2 vinculados</h2>
-    <a href="<?= $this->url('ac-n2', ['action' => 'new']) ?>">+ Novo ACN2</a>
-</div>
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($ac->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
 
-<?php if (count($acn2s) === 0): ?>
-    <p style="margin-top:12px; opacity:0.8;">Nenhum ACN2 cadastrado para este AC.</p>
-<?php else: ?>
-    <table style="width:100%; margin-top:12px;" cellpadding="8" cellspacing="0" border="1">
-        <thead>
-            <tr>
-                <th style="width:80px;">ID</th>
-                <th>Nome</th>
-                <th style="width:220px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($acn2s as $item): ?>
-                <tr>
-                    <td><?= (int) $item->getId() ?></td>
-                    <td><?= $this->escapeHtml($item->getName()) ?></td>
-                    <td>
-                        <a href="<?= $this->url('ac-n2/view', ['id' => $item->getId()]) ?>">Ver</a>
-                        |
-                        <a href="<?= $this->url('ac-n2/edit', ['id' => $item->getId()]) ?>">Editar</a>
-                        |
-                        <a href="<?= $this->url('ac-n2/qrcode', ['id' => $item->getId()]) ?>" target="_blank">QRCode</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+    <section class="crud-table-card">
+        <div class="crud-table-card__header">
+            <div>
+                <h2 class="crud-section-title">ACN2 vinculados</h2>
+                <p class="crud-section-subtitle">
+                    Registros relacionados a esta autoridade certificadora.
+                </p>
+            </div>
+
+            <a href="<?= $this->url('ac-n2/new') ?>" class="crud-btn crud-btn--primary">
+                Novo ACN2
+            </a>
+        </div>
+
+        <?php if (count($acn2s) === 0): ?>
+            <div class="crud-empty crud-empty--embedded">
+                <div class="crud-empty__icon">i</div>
+                <h3 class="crud-empty__title">Nenhum ACN2 vinculado</h3>
+                <p class="crud-empty__text">
+                    Ainda não há registros associados a este AC.
+                </p>
+            </div>
+        <?php else: ?>
+            <div class="crud-table-wrap">
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th class="crud-table__th crud-table__th--id">ID</th>
+                            <th class="crud-table__th">Nome</th>
+                            <th class="crud-table__th crud-table__th--actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($acn2s as $item): ?>
+                            <tr class="crud-table__row">
+                                <td class="crud-table__td crud-table__td--id">
+                                    <span class="crud-badge crud-badge--neutral">
+                                        #<?= (int) $item->getId() ?>
+                                    </span>
+                                </td>
+
+                                <td class="crud-table__td">
+                                    <div class="crud-entity__title">
+                                        <?= $this->escapeHtml($item->getName()) ?>
+                                    </div>
+                                </td>
+
+                                <td class="crud-table__td crud-table__td--actions">
+                                    <div class="crud-actions">
+                                        <a
+                                            href="<?= $this->url('ac-n2/view', ['id' => $item->getId()]) ?>"
+                                            class="crud-btn crud-btn--ghost crud-btn--sm"
+                                        >
+                                            Ver
+                                        </a>
+
+                                        <a
+                                            href="<?= $this->url('ac-n2/edit', ['id' => $item->getId()]) ?>"
+                                            class="crud-btn crud-btn--ghost crud-btn--sm"
+                                        >
+                                            Editar
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="crud-btn crud-btn--info crud-btn--sm"
+                                            onclick="openQrModal(
+                                                '<?= $this->escapeHtmlAttr($this->url('ac-n2/qrcode', ['id' => $item->getId()])) ?>',
+                                                'Conteúdo do QR: /ac-n2/<?= (int) $item->getId() ?>'
+                                            )"
+                                        >
+                                            QRCode
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </section>
+</section>

@@ -2,78 +2,106 @@
 /** @var Laminas\View\Renderer\PhpRenderer $this */
 ?>
 
-<section style="padding: 16px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;">
-    <h1 style="margin: 0 0 8px 0;">Desafio PHP — Gestão Online</h1>
-    <p style="margin: 0;">
-        Aplicação construída com <strong>Laminas MVC</strong> + <strong>Doctrine ORM</strong> + <strong>MySQL</strong>,
-        com autenticação por sessão e rotas protegidas.
-    </p>
+<section class="home-hero">
+    <div class="home-hero__content">
+        <span class="home-hero__eyebrow">Painel inicial</span>
+
+        <h1 class="home-hero__title">
+            Desafio PHP — <span>Gestão Online</span>
+        </h1>
+
+        <p class="home-hero__text">
+            Aplicação construída com <strong>Laminas MVC</strong>,
+            <strong>Doctrine ORM</strong> e <strong>MySQL</strong>,
+            com autenticação por sessão, rotas protegidas e operações seguras.
+        </p>
+    </div>
+
+    <div class="home-hero__badge">
+        <span class="home-hero__badge-number">GO</span>
+        <span class="home-hero__badge-text">Admin</span>
+    </div>
 </section>
 
-<nav style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 16px;">
-    <a
-        href="<?= $this->url('acs') ?>"
-        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
-    >
-        ACs
+<nav class="home-nav" aria-label="Acessos rápidos">
+    <a href="<?= $this->url('acs') ?>" class="home-nav__link">
+        <span class="home-nav__title">ACs</span>
+        <span class="home-nav__subtitle">Gerenciar autoridades certificadoras</span>
     </a>
 
-    <a
-        href="<?= $this->url('ac-n2') ?>"
-        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
-    >
-        AC N2
+    <a href="<?= $this->url('ac-n2') ?>" class="home-nav__link">
+        <span class="home-nav__title">AC N2</span>
+        <span class="home-nav__subtitle">Administrar registros de nível 2</span>
     </a>
 
-    <a
-        href="<?= $this->url('ars') ?>"
-        style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;"
-    >
-        AR
+    <a href="<?= $this->url('ars') ?>" class="home-nav__link">
+        <span class="home-nav__title">AR</span>
+        <span class="home-nav__subtitle">Controlar autoridades de registro</span>
     </a>
 </nav>
 
-<section style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
-    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
-        <h2 style="margin:0 0 8px 0; font-size: 18px;">Funcionalidades</h2>
-        <ul style="margin:0; padding-left:18px;">
-            <li>Login e logout</li>
-            <li>Proteção de rotas (redirect para login)</li>
-            <li>CRUD de AC</li>
-            <li>Geração de QRCode para AC</li>
-        </ul>
-    </div>
+<section class="home-grid">
+    <article class="home-card">
+        <div class="home-card__icon">✓</div>
+        <h2 class="home-card__title">Funcionalidades</h2>
 
-    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
-        <h2 style="margin:0 0 8px 0; font-size: 18px;">Tecnologias</h2>
-        <ul style="margin:0; padding-left:18px;">
+        <ul class="home-list">
+            <li>Login e logout</li>
+            <li>Proteção de rotas com redirecionamento para login</li>
+            <li>CRUD de AC</li>
+            <li>CRUD de AC N2</li>
+            <li>CRUD de AR</li>
+            <li>Geração de QRCode</li>
+        </ul>
+    </article>
+
+    <article class="home-card">
+        <div class="home-card__icon">⚙</div>
+        <h2 class="home-card__title">Tecnologias</h2>
+
+        <ul class="home-list">
             <li>Laminas MVC</li>
             <li>Doctrine ORM + Migrations</li>
-            <li>MySQL (Docker)</li>
-            <li>QR Code: chillerlan/php-qrcode</li>
+            <li>MySQL</li>
+            <li>Docker</li>
+            <li>QR Code com <code>chillerlan/php-qrcode</code></li>
         </ul>
-    </div>
+    </article>
 
-    <div style="border:1px solid #ddd; border-radius:8px; padding:12px;">
-        <h2 style="margin:0 0 8px 0; font-size: 18px;">Acesso</h2>
-        <p style="margin:0 0 8px 0;">
+    <article class="home-card">
+        <div class="home-card__icon">🔐</div>
+        <h2 class="home-card__title">Acesso</h2>
+
+        <p class="home-card__text">
             Use o usuário seed:
         </p>
-        <ul style="margin:0; padding-left:18px;">
+
+        <ul class="home-list home-list--credentials">
             <li><strong>Email:</strong> admin@admin.com</li>
             <li><strong>Senha:</strong> admin123</li>
         </ul>
-        <p style="margin:8px 0 0 0; color:#666;">
-            (Se você alterou via CLI, utilize as credenciais configuradas.)
+
+        <p class="home-card__hint">
+            Se você alterou via CLI, utilize as credenciais configuradas no ambiente.
         </p>
-    </div>
+    </article>
 </section>
 
-<section style="margin-top: 16px; padding: 12px; border: 1px dashed #ddd; border-radius: 8px;">
-    <h2 style="margin:0 0 8px 0; font-size: 18px;">Notas rápidas</h2>
-    <ul style="margin:0; padding-left:18px;">
-        <li>Rotas protegidas exigem login (qualquer rota diferente de <code>/login</code>).</li>
-        <li>Operações de escrita usam <strong>POST</strong> com redirecionamento (PRG).</li>
-        <li>Delete é feito via <strong>POST</strong> para evitar efeitos colaterais em GET.</li>
+<section class="home-notes">
+    <div class="home-notes__header">
+        <span class="home-notes__eyebrow">Boas práticas</span>
+        <h2 class="home-notes__title">Notas rápidas</h2>
+    </div>
+
+    <ul class="home-list home-list--notes">
+        <li>
+            Rotas protegidas exigem login, exceto a rota <code>/login</code>.
+        </li>
+        <li>
+            Operações de escrita utilizam <strong>POST</strong> com redirecionamento no padrão PRG.
+        </li>
+        <li>
+            Exclusões usam <strong>POST</strong> para evitar efeitos colaterais em requisições GET.
+        </li>
     </ul>
 </section>

@@ -9,11 +9,50 @@
     <meta charset="utf-8">
     <?= $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
     <?= $this->headTitle('Login - Desafio PHP')->setSeparator(' - ')->setAutoEscape(false) ?>
-    <?= $this->headLink()->prependStylesheet($this->basePath('css/style.css')) ?>
+
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/style.css')) ?>
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/auth.css')) ?>
 </head>
-<body>
-    <main style="max-width: 420px; margin: 80px auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px;">
-        <?= $this->content ?>
+<body class="auth-page">
+    <main class="auth-wrapper">
+        <section class="auth-shell">
+            <aside class="auth-brand">
+                <div class="auth-brand__badge">Desafio PHP</div>
+
+                <h1 class="auth-brand__title">
+                    Plataforma com visual mais
+                    <span>profissional</span>
+                </h1>
+
+                <p class="auth-brand__text">
+                    Acesse o sistema por uma interface moderna, limpa e confiável,
+                    inspirada em produtos corporativos do segmento de gestão.
+                </p>
+
+                <div class="auth-brand__highlights">
+                    <div class="auth-highlight">
+                        <span class="auth-highlight__dot"></span>
+                        <span>Acesso seguro e centralizado ao sistema.</span>
+                    </div>
+
+                    <div class="auth-highlight">
+                        <span class="auth-highlight__dot"></span>
+                        <span>Visual mais profissional e alinhado ao contexto do desafio.</span>
+                    </div>
+
+                    <div class="auth-highlight">
+                        <span class="auth-highlight__dot"></span>
+                        <span>Base reaproveitável para as demais telas internas.</span>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="auth-panel">
+                <div class="auth-panel__inner">
+                    <?= $this->content ?>
+                </div>
+            </section>
+        </section>
     </main>
 </body>
 </html>

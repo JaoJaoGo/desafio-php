@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Application;
 
@@ -8,11 +6,11 @@ use Application\Command\CreateUserCommand;
 use Application\Service\AuthService;
 use Application\Service\CsrfService;
 use Laminas\EventManager\EventInterface;
-use Laminas\Mvc\MvcEvent;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\ModuleManager\Feature\InitProviderInterface;
 use Laminas\ModuleManager\ModuleManagerInterface;
+use Laminas\Mvc\MvcEvent;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 final class Module implements ConfigProviderInterface, InitProviderInterface, BootstrapListenerInterface
@@ -96,7 +94,6 @@ final class Module implements ConfigProviderInterface, InitProviderInterface, Bo
     {
         $request = $e->getRequest();
 
-        // Só valida CSRF para requests "unsafe" (web forms)
         $method = strtoupper((string) $request->getMethod());
         if (!in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return null;
@@ -114,29 +111,40 @@ final class Module implements ConfigProviderInterface, InitProviderInterface, Bo
 
         $csrfRoutes = $config['csrf']['routes'] ?? [];
         if (!is_array($csrfRoutes) || !array_key_exists($routeName, $csrfRoutes)) {
-            // Opt-in: se não estiver mapeada, não valida aqui
             return null;
         }
 
         $formPattern = (string) $csrfRoutes[$routeName];
-
-        // Substitui placeholders tipo {id}
         $formId = $this->resolveFormId($formPattern, $routeMatch->getParams());
 
-        /** @var CsrfService $csrf */
-        $csrf = $sm->get(CsrfService::class);
+        /** @var \Application\Service\CsrfService $csrf */
+        $csrf = $sm->get(\Application\Service\CsrfService::class);
 
-        // Token pode vir por POST (forms). (Se um dia virar API, dá pra aceitar header também)
         $post = method_exists($request, 'getPost') ? $request->getPost() : null;
         $token = '';
+
         if ($post && isset($post['csrf'])) {
             $token = (string) $post['csrf'];
         }
 
         if (!$csrf->isValid($formId, $token)) {
             $response = $e->getResponse();
-            $response->setStatusCode(403);
-            $response->setContent('CSRF inválido');
+
+            $referer = $request->getHeader('Referer');
+            $fallbackUrl = '/';
+
+            if ($routeName === 'logout') {
+                $fallbackUrl = '/login';
+            }
+
+            $redirectUrl = $fallbackUrl;
+
+            if ($referer && method_exists($referer, 'getUri')) {
+                $redirectUrl = (string) $referer->getUri();
+            }
+
+            $response->getHeaders()->addHeaderLine('Location', $redirectUrl);
+            $response->setStatusCode(303);
 
             $e->stopPropagation(true);
             return $response;

@@ -6,79 +6,143 @@
  */
 ?>
 
-<p>
-    <a href="<?= $this->url('home') ?>">&larr; Voltar</a>
-</p>
+<section class="crud-page">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('home') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
+    </div>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-    <h1 style="margin:0;">AC N2</h1>
-    <a href="<?= $this->url('ac-n2/new') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">
-        Novo AC N2
-    </a>
-</div>
+    <header class="crud-hero">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Cadastro vinculado</span>
+            <h1 class="crud-hero__title">AC N2</h1>
+            <p class="crud-hero__text">
+                Gerencie registros de AC N2 e seus vínculos com as autoridades certificadoras principais.
+            </p>
+        </div>
 
-<?php if (empty($items)): ?>
-    <p>Nenhum AC N2 cadastrado.</p>
-<?php else: ?>
-    <table style="width:100%; border-collapse: collapse;">
-        <thead>
-            <tr>
-                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">ID</th>
-                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Nome</th>
-                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">AC</th>
-                <th style="border-bottom:1px solid #ddd; padding:8px; width: 260px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($items as $item): ?>
-            <?php
-                $id = (int) $item->getId();
-                $ac = $item->getAc();
-                $acLabel = sprintf('#%d — %s', (int) $ac->getId(), $ac->getName());
-            ?>
-            <tr>
-                <td style="border-bottom:1px solid #eee; padding:8px;"><?= $id ?></td>
-                <td style="border-bottom:1px solid #eee; padding:8px;"><?= $this->escapeHtml($item->getName()) ?></td>
-                <td style="border-bottom:1px solid #eee; padding:8px;">
-                    #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
-                </td>
-                <td style="border-bottom:1px solid #eee; padding:8px;">
-                    <a href="<?= $this->url('ac-n2/edit', ['id' => $id]) ?>">Editar</a>
-                    &nbsp;|&nbsp;
+        <div class="crud-hero__actions">
+            <a href="<?= $this->url('ac-n2/new') ?>" class="crud-btn crud-btn--primary">
+                Novo AC N2
+            </a>
+        </div>
+    </header>
 
-                    <form
-                        action="<?= $this->url('ac-n2/delete', ['id' => $id]) ?>"
-                        method="post"
-                        style="display:inline;"
-                        data-delete-form
-                        data-delete-name="<?= $this->escapeHtmlAttr($item->getName()) ?>"
-                    >
-                        <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('acn2_delete_' . $id)) ?>">
+    <?php if (empty($items)): ?>
+        <section class="crud-empty">
+            <div class="crud-empty__icon">+</div>
+            <h2 class="crud-empty__title">Nenhum AC N2 cadastrado</h2>
+            <p class="crud-empty__text">
+                Crie um novo registro para começar a relacionar ACs de nível 2 ao sistema.
+            </p>
+            <a href="<?= $this->url('ac-n2/new') ?>" class="crud-btn crud-btn--primary">
+                Criar primeiro AC N2
+            </a>
+        </section>
+    <?php else: ?>
+        <section class="crud-table-card">
+            <div class="crud-table-card__header">
+                <div>
+                    <h2 class="crud-section-title">Lista de AC N2</h2>
+                    <p class="crud-section-subtitle">
+                        Total de registros: <strong><?= count($items) ?></strong>
+                    </p>
+                </div>
+            </div>
 
-                        <button
-                            type="button"
-                            style="background:none;border:none;padding:0;color:#c00;cursor:pointer;"
-                            onclick="openDeleteModal(this)"
-                        >
-                            Excluir
-                        </button>
-                    </form>
+            <div class="crud-table-wrap">
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th class="crud-table__th crud-table__th--id">ID</th>
+                            <th class="crud-table__th">Nome</th>
+                            <th class="crud-table__th">AC vinculada</th>
+                            <th class="crud-table__th crud-table__th--actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($items as $item): ?>
+                        <?php
+                            $id = (int) $item->getId();
+                            $ac = $item->getAc();
+                        ?>
+                        <tr class="crud-table__row">
+                            <td class="crud-table__td crud-table__td--id">
+                                <span class="crud-badge crud-badge--neutral">#<?= $id ?></span>
+                            </td>
 
-                    &nbsp;|&nbsp;
+                            <td class="crud-table__td">
+                                <div class="crud-entity">
+                                    <div class="crud-entity__title">
+                                        <?= $this->escapeHtml($item->getName()) ?>
+                                    </div>
+                                </div>
+                            </td>
 
-                    <button
-                        type="button"
-                        style="background:none;border:none;padding:0;color:#06c;cursor:pointer;"
-                        onclick="openQrModal(
-                            '<?= $this->escapeHtmlAttr($this->url('ac-n2/qrcode', ['id' => $id])) ?>',
-                            'Conteúdo do QR: /ac-n2/<?= $id ?>'
-                        )"
-                    >
-                        QRCode
-                    </button>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+                            <td class="crud-table__td">
+                                <div class="crud-entity">
+                                    <div class="crud-entity__title">
+                                        #<?= (int) $ac->getId() ?> — <?= $this->escapeHtml($ac->getName()) ?>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="crud-table__td crud-table__td--actions">
+                                <div class="crud-actions">
+                                    <a
+                                        href="<?= $this->url('ac-n2/view', ['id' => $id]) ?>"
+                                        class="crud-btn crud-btn--ghost crud-btn--sm"
+                                    >
+                                        Ver
+                                    </a>
+
+                                    <a
+                                        href="<?= $this->url('ac-n2/edit', ['id' => $id]) ?>"
+                                        class="crud-btn crud-btn--ghost crud-btn--sm"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <button
+                                        type="button"
+                                        class="crud-btn crud-btn--info crud-btn--sm"
+                                        onclick="openQrModal(
+                                            '<?= $this->escapeHtmlAttr($this->url('ac-n2/qrcode', ['id' => $id])) ?>',
+                                            'Conteúdo do QR: /ac-n2/<?= $id ?>'
+                                        )"
+                                    >
+                                        QRCode
+                                    </button>
+
+                                    <form
+                                        action="<?= $this->url('ac-n2/delete', ['id' => $id]) ?>"
+                                        method="post"
+                                        class="crud-inline-form"
+                                        data-delete-form
+                                        data-delete-name="<?= $this->escapeHtmlAttr($item->getName()) ?>"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="csrf"
+                                            value="<?= $this->escapeHtmlAttr($this->csrfToken('acn2_delete_' . $id)) ?>"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="crud-btn crud-btn--danger crud-btn--sm"
+                                            onclick="openDeleteModal(this)"
+                                        >
+                                            Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    <?php endif; ?>
+</section>

@@ -6,105 +6,162 @@ use Laminas\Mvc\Application;
  * @var Laminas\View\Renderer\PhpRenderer $this
  */
 
-?>
-<h1>A 404 error occurred</h1>
-<h2><?= $this->message ?></h2>
+$reasonMessage = null;
 
-<?php if (! empty($this->reason)) :
+if (!empty($this->reason)) {
     switch ($this->reason) {
         case Application::ERROR_CONTROLLER_CANNOT_DISPATCH:
-            $reasonMessage = 'The requested controller was unable to dispatch the request.';
+            $reasonMessage = 'O controller solicitado não conseguiu despachar a requisição.';
             break;
         case Application::ERROR_MIDDLEWARE_CANNOT_DISPATCH:
-            $reasonMessage = 'The requested middleware was unable to dispatch the request.';
+            $reasonMessage = 'O middleware solicitado não conseguiu despachar a requisição.';
             break;
         case Application::ERROR_CONTROLLER_NOT_FOUND:
-            $reasonMessage = 'The requested controller could not be mapped to an existing controller class.';
+            $reasonMessage = 'O controller solicitado não foi encontrado.';
             break;
         case Application::ERROR_CONTROLLER_INVALID:
-            $reasonMessage = 'The requested controller was not dispatchable.';
+            $reasonMessage = 'O controller solicitado não é despachável.';
             break;
         case Application::ERROR_ROUTER_NO_MATCH:
-            $reasonMessage = 'The requested URL could not be matched by routing.';
+            $reasonMessage = 'A URL solicitada não corresponde a nenhuma rota cadastrada.';
             break;
         default:
-            $reasonMessage = 'We cannot determine at this time why a 404 was generated.';
+            $reasonMessage = 'Não foi possível determinar com precisão o motivo do erro 404.';
             break;
     }
-    ?>
-    <p><?= $reasonMessage ?></p>
-<?php endif ?>
+}
+?>
 
-<?php if (! empty($this->controller)) : ?>
-<dl>
-    <dt>Controller:</dt>
-    <dd>
-        <?= $this->escapeHtml($this->controller) ?>
-        <?php
-        if (! empty($this->controller_class) && $this->controller_class != $this->controller) {
-            printf('(resolves to %s)', $this->escapeHtml($this->controller_class));
-        }
-        ?>
-    </dd>
-</dl>
-<?php endif ?>
+<section class="error-page">
+    <header class="error-hero">
+        <div class="error-hero__content">
+            <span class="error-hero__eyebrow">Página não encontrada</span>
+            <h1 class="error-hero__title">Erro 404</h1>
+            <p class="error-hero__text">
+                <?= $this->escapeHtml($this->message) ?>
+            </p>
+        </div>
 
-<?php if (! empty($this->display_exceptions)) : ?>
-    <?php if (isset($this->exception) && $this->exception instanceof \Throwable) : ?>
-<hr/>
+        <div class="error-hero__code">
+            <span class="error-hero__code-number">404</span>
+            <span class="error-hero__code-label">Not Found</span>
+        </div>
+    </header>
 
-<h2>Additional information:</h2>
-<h3><?= get_class($this->exception) ?></h3>
-<dl>
-    <dt>File:</dt>
-    <dd>
-        <pre><?= $this->exception->getFile() ?>:<?= $this->exception->getLine() ?></pre>
-    </dd>
-    <dt>Message:</dt>
-    <dd>
-        <pre><?= $this->escapeHtml($this->exception->getMessage()) ?></pre>
-    </dd>
-    <dt>Stack trace:</dt>
-    <dd>
-        <pre><?= $this->escapeHtml($this->exception->getTraceAsString()) ?></pre>
-    </dd>
-</dl>
+    <?php if ($reasonMessage) : ?>
+        <section class="error-card">
+            <h2 class="error-card__title">Motivo provável</h2>
+            <p class="error-card__text">
+                <?= $this->escapeHtml($reasonMessage) ?>
+            </p>
+        </section>
+    <?php endif; ?>
 
-        <?php if ($ex = $this->exception->getPrevious()) : ?>
-<hr/>
+    <?php if (!empty($this->controller)) : ?>
+        <section class="error-info-card">
+            <h2 class="error-section-title">Informações da rota</h2>
 
-<h2>Previous exceptions:</h2>
-<ul class="list-unstyled">
-            <?php $icount = 0 ?>
-            <?php while ($ex) : ?>
-    <li>
-        <h3><?= get_class($ex) ?></h3>
-        <dl>
-            <dt>File:</dt>
-            <dd>
-                <pre><?= $ex->getFile() ?>:<?= $ex->getLine() ?></pre>
-            </dd>
-            <dt>Message:</dt>
-            <dd>
-                <pre><?= $this->escapeHtml($ex->getMessage()) ?></pre>
-            </dd>
-            <dt>Stack trace:</dt>
-            <dd>
-                <pre><?= $this->escapeHtml($ex->getTraceAsString()) ?></pre>
-            </dd>
-        </dl>
-    </li>
-                <?php
-                $ex = $ex->getPrevious();
-                if (++$icount >= 50) {
-                    echo '<li>There may be more exceptions, but we do not have enough memory to process it.</li>';
-                    break;
-                }
-                ?>
-            <?php endwhile ?>
-</ul>
-        <?php endif ?>
-    <?php else : ?>
-<h3>No Exception available</h3>
-    <?php endif ?>
-<?php endif ?>
+            <div class="error-info-grid">
+                <div class="error-info-item">
+                    <span class="error-info-item__label">Controller</span>
+                    <div class="error-info-item__value">
+                        <?= $this->escapeHtml($this->controller) ?>
+                    </div>
+                </div>
+
+                <?php if (!empty($this->controller_class) && $this->controller_class !== $this->controller) : ?>
+                    <div class="error-info-item">
+                        <span class="error-info-item__label">Resolve para</span>
+                        <div class="error-info-item__value">
+                            <?= $this->escapeHtml($this->controller_class) ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+    <?php endif; ?>
+
+    <?php if (!empty($this->display_exceptions)) : ?>
+        <?php if (isset($this->exception) && $this->exception instanceof \Throwable) : ?>
+            <section class="error-debug-card">
+                <h2 class="error-section-title">Detalhes técnicos</h2>
+
+                <div class="error-info-grid">
+                    <div class="error-info-item">
+                        <span class="error-info-item__label">Classe da exceção</span>
+                        <div class="error-info-item__value">
+                            <?= $this->escapeHtml(get_class($this->exception)) ?>
+                        </div>
+                    </div>
+
+                    <div class="error-info-item">
+                        <span class="error-info-item__label">Arquivo</span>
+                        <div class="error-info-item__value">
+                            <?= $this->escapeHtml($this->exception->getFile()) ?>:<?= (int) $this->exception->getLine() ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="error-debug-stack">
+                    <div class="error-debug-block">
+                        <h3 class="error-debug-block__title">Mensagem</h3>
+                        <pre><?= $this->escapeHtml($this->exception->getMessage()) ?></pre>
+                    </div>
+
+                    <div class="error-debug-block">
+                        <h3 class="error-debug-block__title">Stack trace</h3>
+                        <pre><?= $this->escapeHtml($this->exception->getTraceAsString()) ?></pre>
+                    </div>
+                </div>
+            </section>
+
+            <?php if ($ex = $this->exception->getPrevious()) : ?>
+                <section class="error-debug-card">
+                    <h2 class="error-section-title">Exceções anteriores</h2>
+
+                    <ul class="error-prev-list">
+                        <?php $icount = 0; ?>
+                        <?php while ($ex) : ?>
+                            <li class="error-prev-item">
+                                <div class="error-debug-stack">
+                                    <div class="error-info-item">
+                                        <span class="error-info-item__label">Classe da exceção</span>
+                                        <div class="error-info-item__value">
+                                            <?= $this->escapeHtml(get_class($ex)) ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="error-debug-block">
+                                        <h3 class="error-debug-block__title">Arquivo</h3>
+                                        <pre><?= $this->escapeHtml($ex->getFile()) ?>:<?= (int) $ex->getLine() ?></pre>
+                                    </div>
+
+                                    <div class="error-debug-block">
+                                        <h3 class="error-debug-block__title">Mensagem</h3>
+                                        <pre><?= $this->escapeHtml($ex->getMessage()) ?></pre>
+                                    </div>
+
+                                    <div class="error-debug-block">
+                                        <h3 class="error-debug-block__title">Stack trace</h3>
+                                        <pre><?= $this->escapeHtml($ex->getTraceAsString()) ?></pre>
+                                    </div>
+                                </div>
+                            </li>
+                            <?php
+                            $ex = $ex->getPrevious();
+                            if (++$icount >= 50) {
+                                echo '<li class="error-empty">Pode haver mais exceções, mas o limite de memória impede exibir todas.</li>';
+                                break;
+                            }
+                            ?>
+                        <?php endwhile; ?>
+                    </ul>
+                </section>
+            <?php endif; ?>
+        <?php else : ?>
+            <section class="error-card">
+                <div class="error-empty">Nenhuma exceção disponível.</div>
+            </section>
+        <?php endif; ?>
+    <?php endif; ?>
+</section>

@@ -1,22 +1,63 @@
-<h1>Login</h1>
+<?php
+$error = !empty($this->error) ? $this->error : null;
+?>
 
-<?php if (!empty($this->error)): ?>
-    <div style="padding:10px; border:1px solid #f00; margin-bottom:10px;">
-        <?= $this->escapeHtml($this->error) ?>
-    </div>
-<?php endif; ?>
-
-<form method="post" action="<?= $this->url('login') ?>">
-    <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('login_form')) ?>">
-    <div style="margin-bottom:10px;">
-        <label>Email</label><br>
-        <input type="email" name="email" required autocomplete="email">
+<div class="login">
+    <div class="login__header">
+        <span class="login__eyebrow">Área restrita</span>
+        <h1 class="login__title">Entrar</h1>
+        <p class="login__subtitle">
+            Acesse sua conta para continuar no sistema.
+        </p>
     </div>
 
-    <div style="margin-bottom:10px">
-        <label>Senha</label><br>
-        <input type="password" name="password" required autocomplete="current-password">
-    </div>
+    <?php if ($error): ?>
+        <div class="alert alert--error" role="alert">
+            <?= $this->escapeHtml($error) ?>
+        </div>
+    <?php endif; ?>
 
-    <button type="submit">Entrar</button>
-</form>
+    <form class="form" method="post" action="<?= $this->url('login') ?>">
+        <input
+            type="hidden"
+            name="csrf"
+            value="<?= $this->escapeHtmlAttr($this->csrfToken('login_form')) ?>"
+        >
+
+        <div class="form__group">
+            <label class="form__label" for="email">Email</label>
+            <input
+                class="form__input"
+                id="email"
+                type="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="seuemail@empresa.com"
+            >
+        </div>
+
+        <div class="form__group">
+            <label class="form__label" for="password">Senha</label>
+            <input
+                class="form__input"
+                id="password"
+                type="password"
+                name="password"
+                required
+                autocomplete="current-password"
+                placeholder="Digite sua senha"
+            >
+        </div>
+
+        <div class="form__actions">
+            <button class="btn btn--primary btn--block" type="submit">
+                Entrar no sistema
+            </button>
+        </div>
+    </form>
+
+    <p class="login__footer">
+        Desafio técnico em PHP com foco em organização, clareza visual e experiência de uso.
+    </p>
+</div>

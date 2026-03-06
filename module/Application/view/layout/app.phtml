@@ -7,160 +7,212 @@
     <meta charset="utf-8">
     <?= $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
     <?= $this->headTitle('Desafio PHP - Gestão Online')->setSeparator(' - ')->setAutoEscape(false) ?>
-    <?= $this->headLink()->prependStylesheet($this->basePath('css/style.css')) ?>
+
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/style.css')) ?>
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/app.css')) ?>
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/home.css')) ?>
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/crud.css')) ?>
+    <?= $this->headLink()->appendStylesheet($this->basePath('css/error.css')) ?>
+
     <?= $this->headScript() ?>
 </head>
-<body>
-    <header style="padding:16px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-            <strong>Desafio PHP - Gestão Online</strong>
-        </div>
+<body class="app-page">
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="app-header__inner">
+                <div class="app-brand">
+                    <div class="app-brand__mark">GO</div>
 
-        <nav>
-            <form method="post" action="<?= $this->url('logout') ?>" style="display:inline">
-                <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('logout_form')) ?>">
-                <button type="submit">Logout</button>
-            </form>
-        </nav>
-    </header>
+                    <div class="app-brand__content">
+                        <strong class="app-brand__title">Desafio PHP - Gestão Online</strong>
+                        <span class="app-brand__subtitle">Painel administrativo</span>
+                    </div>
+                </div>
 
-    <main style="max-width: 1000px; margin: 0 auto; padding: 24px;">
-        <?= $this->content ?>
-    </main>
+                <nav class="app-nav" aria-label="Navegação principal">
+                    <form method="post" action="<?= $this->url('logout') ?>" class="app-nav__form">
+                        <input
+                            type="hidden"
+                            name="csrf"
+                            value="<?= $this->escapeHtmlAttr($this->csrfToken('logout_form')) ?>"
+                        >
 
-    <footer style="padding:16px; border-top:1px solid #ddd; text-align:center;">
-        <small>&copy; <?= date('Y') ?> Desafio PHP - Gestão Online</small>
-        <br>
-        <small>Desenvolvido por: João Victor Guedes Carrijo</small>
-    </footer>
+                        <button type="submit" class="app-btn app-btn--ghost app-btn--sm">
+                            Logout
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </header>
 
+        <main class="app-main">
+            <div class="app-main__inner">
+                <?= $this->content ?>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="app-footer__inner">
+                <small>&copy; <?= date('Y') ?> Desafio PHP - Gestão Online</small>
+                <small>Desenvolvido por: João Victor Guedes Carrijo</small>
+            </div>
+        </footer>
+    </div>
 
     <!-- Modais globais (QRCode + Delete) -->
-<div id="qrModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999;">
-    <div style="background:#fff; max-width:520px; margin:10vh auto; padding:16px; border-radius:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong>QRCode</strong>
-            <button type="button" onclick="closeQrModal()" style="border:none;background:none;font-size:18px;cursor:pointer;">✕</button>
-        </div>
+    <div id="qrModal" class="app-modal" aria-hidden="true">
+        <div class="app-modal__dialog app-modal__dialog--qr">
+            <div class="app-modal__header">
+                <strong class="app-modal__title">QRCode</strong>
 
-        <div style="margin-top:12px; text-align:center;">
-            <img id="qrImg" alt="QRCode" style="max-width:100%; height:auto;" />
-            <div style="margin-top:8px;">
-                <small id="qrHint"></small>
-            </div>
-        </div>
-
-        <div style="margin-top:12px; text-align:right;">
-            <button type="button" onclick="closeQrModal()" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer;">
-                Fechar
-            </button>
-        </div>
-    </div>
-</div>
-
-<div id="deleteModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9999;">
-    <div style="background:#fff; max-width:520px; margin:10vh auto; padding:16px; border-radius:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong>Confirmar exclusão</strong>
-            <button type="button" onclick="closeDeleteModal()" style="border:none;background:none;font-size:18px;cursor:pointer;">✕</button>
-        </div>
-
-        <div style="margin-top:12px;">
-            <p style="margin:0 0 8px 0;">Tem certeza que deseja excluir este item?</p>
-
-            <div style="padding:10px 12px; border:1px solid #eee; border-radius:8px; background:#fafafa;">
-                <strong id="deleteItemName"></strong>
+                <button
+                    type="button"
+                    class="app-modal__close"
+                    onclick="closeQrModal()"
+                    aria-label="Fechar modal de QRCode"
+                >
+                    ✕
+                </button>
             </div>
 
-            <p style="margin:10px 0 0 0; color:#666;">Esta ação não pode ser desfeita.</p>
-        </div>
+            <div class="app-modal__body app-modal__body--center">
+                <div class="app-qr-preview">
+                    <img id="qrImg" alt="QRCode" class="app-qr-preview__image" />
+                </div>
 
-        <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:8px;">
-            <button
-                type="button"
-                onclick="closeDeleteModal()"
-                style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:#fff;"
-            >
-                Cancelar
-            </button>
+                <div class="app-modal__hint">
+                    <small id="qrHint"></small>
+                </div>
+            </div>
 
-            <button
-                type="button"
-                onclick="confirmDelete()"
-                style="padding:10px 12px; border:1px solid #c00; border-radius:8px; cursor:pointer; background:#c00; color:#fff;"
-            >
-                Excluir
-            </button>
+            <div class="app-modal__footer">
+                <button
+                    type="button"
+                    class="app-btn app-btn--secondary"
+                    onclick="closeQrModal()"
+                >
+                    Fechar
+                </button>
+            </div>
         </div>
     </div>
-</div>
+
+    <div id="deleteModal" class="app-modal" aria-hidden="true">
+        <div class="app-modal__dialog">
+            <div class="app-modal__header">
+                <strong class="app-modal__title">Confirmar exclusão</strong>
+
+                <button
+                    type="button"
+                    class="app-modal__close"
+                    onclick="closeDeleteModal()"
+                    aria-label="Fechar modal de exclusão"
+                >
+                    ✕
+                </button>
+            </div>
+
+            <div class="app-modal__body">
+                <p class="app-modal__text">
+                    Tem certeza que deseja excluir este item?
+                </p>
+
+                <div class="app-delete-card">
+                    <strong id="deleteItemName"></strong>
+                </div>
+
+                <p class="app-modal__warning">
+                    Esta ação não pode ser desfeita.
+                </p>
+            </div>
+
+            <div class="app-modal__footer app-modal__footer--actions">
+                <button
+                    type="button"
+                    class="app-btn app-btn--secondary"
+                    onclick="closeDeleteModal()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    class="app-btn app-btn--danger"
+                    onclick="confirmDelete()"
+                >
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
     (function(){
-    let __deleteForm = null;
+        let __deleteForm = null;
 
-    // QR Modal: recebe a URL completa do endpoint que gera o PNG (mais flexível)
-    window.openQrModal = function(qrEndpointUrl, hintText){
-        const modal = document.getElementById('qrModal');
-        const img = document.getElementById('qrImg');
-        const hint = document.getElementById('qrHint');
+        // QR Modal: recebe a URL completa do endpoint que gera o PNG (mais flexível)
+        window.openQrModal = function(qrEndpointUrl, hintText){
+            const modal = document.getElementById('qrModal');
+            const img = document.getElementById('qrImg');
+            const hint = document.getElementById('qrHint');
 
-        // cache-buster pra evitar imagem antiga
-        const sep = qrEndpointUrl.includes('?') ? '&' : '?';
-        img.src = qrEndpointUrl + sep + '_=' + Date.now();
+            const sep = qrEndpointUrl.includes('?') ? '&' : '?';
+            img.src = qrEndpointUrl + sep + '_=' + Date.now();
 
-        hint.textContent = hintText || '';
-        modal.style.display = 'block';
+            hint.textContent = hintText || '';
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
 
-        // fechar clicando no backdrop
-        modal.onclick = function(e){
-            if(e.target === modal) window.closeQrModal();
+            modal.onclick = function(e){
+                if(e.target === modal) window.closeQrModal();
+            };
         };
-    };
 
-    window.closeQrModal = function(){
-        const modal = document.getElementById('qrModal');
-        const img = document.getElementById('qrImg');
-        const hint = document.getElementById('qrHint');
+        window.closeQrModal = function(){
+            const modal = document.getElementById('qrModal');
+            const img = document.getElementById('qrImg');
+            const hint = document.getElementById('qrHint');
 
-        img.src = '';
-        hint.textContent = '';
-        modal.style.display = 'none';
-        modal.onclick = null;
-    };
-
-    window.openDeleteModal = function(btn){
-        const form = btn.closest('form[data-delete-form]');
-        if(!form) return;
-
-        __deleteForm = form;
-
-        const modal = document.getElementById('deleteModal');
-        const nameEl = document.getElementById('deleteItemName');
-
-        const name = form.getAttribute('data-delete-name') || '';
-        nameEl.textContent = name !== '' ? name : '(sem nome)';
-
-        modal.style.display = 'block';
-
-        // fechar clicando no backdrop
-        modal.onclick = function(e){
-            if(e.target === modal) window.closeDeleteModal();
+            img.src = '';
+            hint.textContent = '';
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.onclick = null;
         };
-    };
 
-    window.closeDeleteModal = function(){
-        const modal = document.getElementById('deleteModal');
-        modal.style.display = 'none';
-        modal.onclick = null;
-        __deleteForm = null;
-    };
+        window.openDeleteModal = function(btn){
+            const form = btn.closest('form[data-delete-form]');
+            if(!form) return;
 
-    window.confirmDelete = function(){
-        if(__deleteForm){
-            __deleteForm.submit();
-        }
-    };
+            __deleteForm = form;
+
+            const modal = document.getElementById('deleteModal');
+            const nameEl = document.getElementById('deleteItemName');
+
+            const name = form.getAttribute('data-delete-name') || '';
+            nameEl.textContent = name !== '' ? name : '(sem nome)';
+
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+
+            modal.onclick = function(e){
+                if(e.target === modal) window.closeDeleteModal();
+            };
+        };
+
+        window.closeDeleteModal = function(){
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.onclick = null;
+            __deleteForm = null;
+        };
+
+        window.confirmDelete = function(){
+            if(__deleteForm){
+                __deleteForm.submit();
+            }
+        };
     })();
     </script>
 

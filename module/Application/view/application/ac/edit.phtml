@@ -1,28 +1,62 @@
 <?php /** @var \Laminas\View\Renderer\PhpRenderer $this */ ?>
 
-<h1>Editar AC</h1>
-
-<p>
-    <a href="<?= $this->url('acs') ?>">&larr; Voltar</a>
-</p>
-
-<?php if (!empty($this->error)): ?>
-    <div style="padding:10px; border:1px solid #f00; margin-bottom:10px;">
-        <?= $this->escapeHtml($this->error) ?>
+<section class="crud-page crud-page--form">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('acs') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
     </div>
-<?php endif; ?>
 
-<form method="post" action="<?= $this->url('acs/edit', ['id' => $this->ac->getId()]) ?>">
-    <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ac_edit_' . $this->ac->getId())) ?>">
-    <div style="margin-bottom:10px;">
-        <label>Nome</label><br>
-        <input
-            type="text"
-            name="name"
-            value="<?= $this->escapeHtmlAttr($this->ac->getName()) ?>"
-            required
+    <header class="crud-hero crud-hero--compact">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Edição</span>
+            <h1 class="crud-hero__title">Editar AC</h1>
+            <p class="crud-hero__text">
+                Atualize as informações do registro selecionado.
+            </p>
+        </div>
+    </header>
+
+    <section class="crud-form-card">
+        <?php if (!empty($this->error)): ?>
+            <div class="crud-alert crud-alert--error" role="alert">
+                <?= $this->escapeHtml($this->error) ?>
+            </div>
+        <?php endif; ?>
+
+        <form
+            method="post"
+            action="<?= $this->url('acs/edit', ['id' => $this->ac->getId()]) ?>"
+            class="crud-form"
         >
-    </div>
+            <input
+                type="hidden"
+                name="csrf"
+                value="<?= $this->escapeHtmlAttr($this->csrfToken('ac_edit_' . $this->ac->getId())) ?>"
+            >
 
-    <button type="submit">Salvar</button>
-</form>
+            <div class="crud-form__group">
+                <label class="crud-form__label" for="name">Nome</label>
+                <input
+                    class="crud-form__input"
+                    id="name"
+                    type="text"
+                    name="name"
+                    value="<?= $this->escapeHtmlAttr($this->ac->getName()) ?>"
+                    required
+                    placeholder="Digite o nome do AC"
+                >
+            </div>
+
+            <div class="crud-form__actions">
+                <a href="<?= $this->url('acs') ?>" class="crud-btn crud-btn--secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="crud-btn crud-btn--primary">
+                    Salvar alterações
+                </button>
+            </div>
+        </form>
+    </section>
+</section>

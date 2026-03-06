@@ -7,56 +7,162 @@
  */
 ?>
 
-<a href="<?= $this->url('ac-n2') ?>">&larr; Voltar</a>
+<section class="crud-page">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('ac-n2') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
+    </div>
 
-<h1 style="margin-top:12px;">ACN2 #<?= (int) $item->getId() ?></h1>
+    <header class="crud-hero">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Detalhes do registro</span>
+            <h1 class="crud-hero__title">
+                AC N2 <span class="crud-hero__id">#<?= (int) $item->getId() ?></span>
+            </h1>
+            <p class="crud-hero__text">
+                Visualização detalhada do AC N2, sua AC pai e os ARs vinculados.
+            </p>
+        </div>
 
-<div style="margin-top:12px;">
-    <p><strong>Nome:</strong> <?= $this->escapeHtml($item->getName()) ?></p>
-</div>
+        <div class="crud-hero__actions">
+            <a
+                href="<?= $this->url('ac-n2/edit', ['id' => $item->getId()]) ?>"
+                class="crud-btn crud-btn--primary"
+            >
+                Editar AC N2
+            </a>
+        </div>
+    </header>
 
-<hr style="margin:24px 0;">
+    <section class="crud-detail-card">
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID</span>
+                <strong class="crud-detail-item__value">#<?= (int) $item->getId() ?></strong>
+            </div>
 
-<h2 style="margin:0;">Pai (AC)</h2>
-<p style="margin-top:12px;">
-    <strong>#<?= (int) $ac->getId() ?> —</strong>
-    <?= $this->escapeHtml($ac->getName()) ?>
-    |
-    <a href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>">Ver AC</a>
-</p>
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($item->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
 
-<hr style="margin:24px 0;">
+    <section class="crud-detail-card">
+        <div class="crud-table-card__header">
+            <div>
+                <h2 class="crud-section-title">Pai (AC)</h2>
+                <p class="crud-section-subtitle">
+                    Autoridade certificadora principal vinculada a este registro.
+                </p>
+            </div>
 
-<div style="display:flex; align-items:center; justify-content:space-between;">
-    <h2 style="margin:0;">ARs vinculados</h2>
-    <a href="<?= $this->url('ars', ['action' => 'new']) ?>">+ Novo AR</a>
-</div>
+            <a
+                href="<?= $this->url('acs/view', ['id' => $ac->getId()]) ?>"
+                class="crud-btn crud-btn--ghost"
+            >
+                Ver AC
+            </a>
+        </div>
 
-<?php if (count($ars) === 0): ?>
-    <p style="margin-top:12px; opacity:0.8;">Nenhum AR cadastrado para este ACN2.</p>
-<?php else: ?>
-    <table style="width:100%; margin-top:12px;" cellpadding="8" cellspacing="0" border="1">
-        <thead>
-            <tr>
-                <th style="width:80px;">ID</th>
-                <th>Nome</th>
-                <th style="width:220px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($ars as $ar): ?>
-                <tr>
-                    <td><?= (int) $ar->getId() ?></td>
-                    <td><?= $this->escapeHtml($ar->getName()) ?></td>
-                    <td>
-                        <a href="<?= $this->url('ars/view', ['id' => $ar->getId()]) ?>">Ver</a>
-                        |
-                        <a href="<?= $this->url('ars/edit', ['id' => $ar->getId()]) ?>">Editar</a>
-                        |
-                        <a href="<?= $this->url('ars/qrcode', ['id' => $ar->getId()]) ?>" target="_blank">QRCode</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+        <div class="crud-detail-grid">
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">ID da AC</span>
+                <strong class="crud-detail-item__value">#<?= (int) $ac->getId() ?></strong>
+            </div>
+
+            <div class="crud-detail-item">
+                <span class="crud-detail-item__label">Nome da AC</span>
+                <strong class="crud-detail-item__value">
+                    <?= $this->escapeHtml($ac->getName()) ?>
+                </strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="crud-table-card">
+        <div class="crud-table-card__header">
+            <div>
+                <h2 class="crud-section-title">ARs vinculados</h2>
+                <p class="crud-section-subtitle">
+                    Registros relacionados a este AC N2.
+                </p>
+            </div>
+
+            <a href="<?= $this->url('ars/new') ?>" class="crud-btn crud-btn--primary">
+                Novo AR
+            </a>
+        </div>
+
+        <?php if (count($ars) === 0): ?>
+            <div class="crud-empty crud-empty--embedded">
+                <div class="crud-empty__icon">i</div>
+                <h3 class="crud-empty__title">Nenhum AR vinculado</h3>
+                <p class="crud-empty__text">
+                    Ainda não há ARs associados a este AC N2.
+                </p>
+            </div>
+        <?php else: ?>
+            <div class="crud-table-wrap">
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th class="crud-table__th crud-table__th--id">ID</th>
+                            <th class="crud-table__th">Nome</th>
+                            <th class="crud-table__th crud-table__th--actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ars as $ar): ?>
+                            <tr class="crud-table__row">
+                                <td class="crud-table__td crud-table__td--id">
+                                    <span class="crud-badge crud-badge--neutral">
+                                        #<?= (int) $ar->getId() ?>
+                                    </span>
+                                </td>
+
+                                <td class="crud-table__td">
+                                    <div class="crud-entity__title">
+                                        <?= $this->escapeHtml($ar->getName()) ?>
+                                    </div>
+                                </td>
+
+                                <td class="crud-table__td crud-table__td--actions">
+                                    <div class="crud-actions">
+                                        <a
+                                            href="<?= $this->url('ars/view', ['id' => $ar->getId()]) ?>"
+                                            class="crud-btn crud-btn--ghost crud-btn--sm"
+                                        >
+                                            Ver
+                                        </a>
+
+                                        <a
+                                            href="<?= $this->url('ars/edit', ['id' => $ar->getId()]) ?>"
+                                            class="crud-btn crud-btn--ghost crud-btn--sm"
+                                        >
+                                            Editar
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="crud-btn crud-btn--info crud-btn--sm"
+                                            onclick="openQrModal(
+                                                '<?= $this->escapeHtmlAttr($this->url('ars/qrcode', ['id' => $ar->getId()])) ?>',
+                                                'Conteúdo do QR: /ars/<?= (int) $ar->getId() ?>'
+                                            )"
+                                        >
+                                            QRCode
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </section>
+</section>

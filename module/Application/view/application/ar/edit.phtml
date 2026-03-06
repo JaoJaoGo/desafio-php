@@ -9,44 +9,81 @@
  */
 ?>
 
-<h1>Editar AR #<?= (int) $item->getId() ?></h1>
-
-<?php if (!empty($error)): ?>
-    <div style="padding:12px; border:1px solid #f3c; background:#fff5f5; border-radius:8px; margin:12px 0;">
-        <?= $this->escapeHtml($error) ?>
-    </div>
-<?php endif; ?>
-
-<form method="post" action="<?= $this->url('ars/edit', ['id' => $item->getId()]) ?>">
-    <input type="hidden" name="csrf" value="<?= $this->escapeHtmlAttr($this->csrfToken('ar_edit_' . $item->getId())) ?>">
-
-    <div style="margin-bottom:12px;">
-        <label>AC N2</label><br>
-        <select name="ac_n2_id" required style="padding:8px; width:100%; max-width:420px;">
-            <option value="">Selecione...</option>
-            <?php foreach ($acN2s as $acN2): ?>
-                <?php $ac = $acN2->getAc(); ?>
-                <option value="<?= (int) $acN2->getId() ?>" <?= ((int)$acN2Id === (int)$acN2->getId()) ? 'selected' : '' ?>>
-                    #<?= (int) $acN2->getId() ?> — <?= $this->escapeHtml($acN2->getName()) ?> (AC: <?= $this->escapeHtml($ac->getName()) ?>)
-                </option>
-            <?php endforeach; ?>
-        </select>
+<section class="crud-page crud-page--form">
+    <div class="crud-page__topbar">
+        <a href="<?= $this->url('ars') ?>" class="crud-back-link">
+            &larr; Voltar
+        </a>
     </div>
 
-    <div style="margin-bottom:12px;">
-        <label>Nome</label><br>
-        <input
-            type="text"
-            name="name"
-            value="<?= $this->escapeHtmlAttr($name) ?>"
-            required
-            maxlength="150"
-            style="padding:8px; width:100%; max-width:420px;"
+    <header class="crud-hero crud-hero--compact">
+        <div class="crud-hero__content">
+            <span class="crud-hero__eyebrow">Edição</span>
+            <h1 class="crud-hero__title">Editar AR</h1>
+            <p class="crud-hero__text">
+                Atualize os dados do registro e seu vínculo com o AC N2 correspondente.
+            </p>
+        </div>
+    </header>
+
+    <section class="crud-form-card">
+        <?php if (!empty($error)): ?>
+            <div class="crud-alert crud-alert--error" role="alert">
+                <?= $this->escapeHtml($error) ?>
+            </div>
+        <?php endif; ?>
+
+        <form
+            method="post"
+            action="<?= $this->url('ars/edit', ['id' => $item->getId()]) ?>"
+            class="crud-form"
         >
-    </div>
+            <input
+                type="hidden"
+                name="csrf"
+                value="<?= $this->escapeHtmlAttr($this->csrfToken('ar_edit_' . $item->getId())) ?>"
+            >
 
-    <div style="display:flex; gap:10px;">
-        <button type="submit" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer;">Salvar</button>
-        <a href="<?= $this->url('ars') ?>" style="padding:10px 12px; border:1px solid #ddd; border-radius:8px; text-decoration:none;">Cancelar</a>
-    </div>
-</form>
+            <div class="crud-form__group">
+                <label class="crud-form__label" for="ac_n2_id">AC N2</label>
+                <select class="crud-form__select" name="ac_n2_id" id="ac_n2_id" required>
+                    <option value="">Selecione...</option>
+                    <?php foreach ($acN2s as $acN2): ?>
+                        <?php $ac = $acN2->getAc(); ?>
+                        <option
+                            value="<?= (int) $acN2->getId() ?>"
+                            <?= ((int) $acN2Id === (int) $acN2->getId()) ? 'selected' : '' ?>
+                        >
+                            #<?= (int) $acN2->getId() ?> — <?= $this->escapeHtml($acN2->getName()) ?>
+                            (AC: <?= $this->escapeHtml($ac->getName()) ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="crud-form__group">
+                <label class="crud-form__label" for="name">Nome</label>
+                <input
+                    class="crud-form__input"
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="<?= $this->escapeHtmlAttr($name) ?>"
+                    required
+                    maxlength="150"
+                    placeholder="Digite o nome do AR"
+                >
+            </div>
+
+            <div class="crud-form__actions">
+                <a href="<?= $this->url('ars') ?>" class="crud-btn crud-btn--secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="crud-btn crud-btn--primary">
+                    Salvar alterações
+                </button>
+            </div>
+        </form>
+    </section>
+</section>
