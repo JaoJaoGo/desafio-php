@@ -46,7 +46,7 @@ final class Module implements ConfigProviderInterface, InitProviderInterface, Bo
         $app = $e->getTarget();
         $events = $app->getEventManager();
 
-        // 1) Auth guard (rotas protegidas) - se você já tem, pode ignorar esta parte
+        // 1) Auth guard (rotas protegidas)
         $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'enforceAuth'], -100);
 
         // 2) CSRF guard global (opt-in por rota)
